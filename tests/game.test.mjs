@@ -56,13 +56,25 @@ test('a bomber needs two hits', () => {
   assert.equal(g.score, CFG.planes.bomber.score);
 });
 
-test('missile detonates at the target point when nothing is hit', () => {
+test('a missile that hits nothing keeps flying and leaves the screen without exploding', () => {
   const g = newGame();
   g.fire(5, 8);
+  step(g, 0.3); // would have reached the aim point by now under the old rule
+  assert.equal(g.missiles.length, 1);
+  assert.equal(g.drainEvents().filter((e) => e.type === 'explosion').length, 0);
+  step(g, 3);
+  assert.equal(g.missiles.length, 0);
+  assert.equal(g.drainEvents().filter((e) => e.type === 'explosion').length, 0);
+  assert.equal(g.score, 0);
+});
+
+test('a missile flies past the aim point and still hits a plane behind it', () => {
+  const g = newGame();
+  addPlane(g, { x: 0, y: 14 });
+  g.fire(0, 5); // cursor is well short of the plane
   step(g, 1);
-  const ex = g.drainEvents().filter((e) => e.type === 'explosion' && e.kind === 'missile');
-  assert.equal(ex.length, 1);
-  assert.ok(Math.hypot(ex[0].x - 5, ex[0].y - 8) < 0.7);
+  assert.equal(g.planes.length, 0);
+  assert.equal(g.score, CFG.planes.fighter.score);
 });
 
 test('bombs can be shot down and score', () => {
