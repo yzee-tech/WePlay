@@ -39,11 +39,14 @@ Note: separate `turret.js`, `planes.js`, `missiles.js` from the first plan were 
 
 ## Rules (values in `src/config.js`)
 - Turret: 100 health, hit radius 1.7, fire cooldown 0.35 s, barrel limited to 5 to 175 degrees. Cursor below the horizon keeps the barrel on its side at the lowest angle.
-- Missile: speed 30, explodes on contact with a plane or bomb, otherwise at the clicked point; blast radius 2.4 damages planes by 1 and destroys bombs. Destroyed planes cause a smaller chain blast (radius 1.6), at most 5 per detonation.
+- Missile: speed 30, flies in a straight line along the barrel direction (the cursor only sets the direction, not a detonation point). It explodes only on contact with a plane or bomb; a miss flies off screen and disappears with no explosion. Blast radius 2.4 damages planes by 1 and destroys bombs. Destroyed planes cause a smaller chain blast (radius 1.6), at most 5 per detonation.
 - Fighter: speed 7, 1 hit, 100 points, small bomb (10 damage). Bomber: speed 4.5, 2 hits, 250 points, large bomb (15 damage).
 - Wave n: 4 + 2n planes; spawn interval 2.0 - 0.12n (min 0.5 s); speed +5% per wave; bomber chance 10% per wave after wave 1 (max 50%). Banner on each wave.
 - High score and mute are saved in localStorage inside try/catch.
 - Sound: launch, explosion, bomb hit, low-health alarm (under 30%), game over; per-sound rate limits and at most 6 concurrent explosions.
+
+## Change log
+- Rev 2.1: missiles no longer detonate at the cursor; they fly until contact or off screen (requested after playtest).
 
 ## Verification done
 - `node --test tests/game.test.mjs`: 15 of 15 pass (a test caught and fixed a barrel-snapping bug when aiming below the horizon on the left side).

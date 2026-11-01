@@ -15,7 +15,7 @@ export const CFG = {
     lowHealthFraction: 0.3,
   },
 
-  missile: { speed: 30, blastRadius: 2.4, maxLife: 3, hitPadding: 0.25 },
+  missile: { speed: 30, blastRadius: 2.4, maxLife: 5, hitPadding: 0.25, offscreenMargin: 1.5 },
 
   // Blast from a destroyed plane (chain reactions).
   chain: { radius: 1.6, maxPerDetonation: 5 },

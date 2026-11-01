@@ -89,11 +89,10 @@ export class Game {
     this.aim(tx, ty);
     const tip = this.barrelTip();
     const dx = Math.cos(this.aimAngle), dy = Math.sin(this.aimAngle);
-    const targetDist = Math.max(2, Math.hypot(tx - tip.x, ty - tip.y));
     this.missiles.push({
       id: this.nextId++, x: tip.x, y: tip.y, dx, dy,
       vx: dx * CFG.missile.speed, vy: dy * CFG.missile.speed,
-      targetDist, travelled: 0, life: 0,
+      life: 0,
     });
     this.cooldown = CFG.turret.cooldown;
     this.events.push({ type: 'fire', x: tip.x, y: tip.y });
@@ -210,12 +209,12 @@ export class Game {
       const ox = m.x, oy = m.y;
       m.x += m.dx * step;
       m.y += m.dy * step;
-      m.travelled += step;
       m.life += dt;
       const contact = this.findContact(ox, oy, m.x, m.y);
       if (contact) { this.detonate(contact.x, contact.y); continue; }
-      if (m.travelled >= m.targetDist) { this.detonate(m.x, m.y); continue; }
-      if (m.life > CFG.missile.maxLife || Math.abs(m.x) > this.halfWidth + 6 || m.y > CFG.camTop + 6 || m.y < -3) continue;
+      // No detonation at the aim point: a missile flies straight until it hits something or leaves the screen.
+      const margin = CFG.missile.offscreenMargin;
+      if (m.life > CFG.missile.maxLife || Math.abs(m.x) > this.halfWidth + margin || m.y > CFG.camTop + margin || m.y < CFG.camBottom - margin) continue;
       keep.push(m);
     }
     this.missiles = keep;
