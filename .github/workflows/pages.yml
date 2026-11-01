@@ -18,9 +18,16 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Run game logic tests
+        run: node --test tests/game.test.mjs
+      - name: Assemble site (only the game files are published)
+        run: |
+          mkdir _site
+          cp index.html style.css _site/
+          cp -r src vendor _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
