@@ -9,7 +9,7 @@ import {
 } from '../air-defense/src/scenery.js';
 import { Game, mulberry32 } from '../air-defense/src/game.js';
 
-const TONES = ['far', 'near', 'ground', 'groundTop', 'water', 'sand', 'snow', 'window'];
+const TONES = ['far', 'near', 'ground', 'groundTop', 'water', 'sand', 'snow', 'window', 'structure'];
 const PRIMITIVE_KINDS = ['hill', 'peak', 'rect', 'band', 'boat', 'cactus'];
 
 test('pickEnvironment is deterministic for a seeded rng', () => {

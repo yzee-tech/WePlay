@@ -3,6 +3,7 @@ import { Effects } from './effects.js';
 import { AudioFx } from './audio.js';
 import { Hud } from './hud.js';
 import { Game } from './game.js';
+import { pickEnvironment, environmentFromString } from './scenery.js';
 
 const STEP = 1 / 60;
 const MAX_FRAME = 0.1;
@@ -29,6 +30,12 @@ if (!webglAvailable()) {
 function start() {
   const view = new Renderer(document.getElementById('stage'));
   const fx = new Effects(view.scene);
+
+  // Scenery: a new random environment for every new game. '?env=night:city'
+  // pins one environment for the whole session (verification/debugging only).
+  // pickEnvironment draws from Math.random, never from the gameplay rng.
+  const pinnedEnv = environmentFromString(new URLSearchParams(window.location.search).get('env'));
+  view.setEnvironment(pinnedEnv || pickEnvironment());
   const audio = new AudioFx();
   const hud = new Hud();
   const game = new Game({ halfWidth: view.halfWidth });
@@ -51,6 +58,7 @@ function start() {
 
   function begin() {
     audio.unlock();
+    view.setEnvironment(pinnedEnv || pickEnvironment());
     game.reset();
     fx.clear();
     audio.alarm(false);
@@ -149,5 +157,9 @@ function start() {
   requestAnimationFrame(frame);
 
   // Test hook for automated checks.
-  window.__airdefense = { game, get mode() { return mode; } };
+  window.__airdefense = {
+    game,
+    get mode() { return mode; },
+    get environment() { return view.env ? { theme: view.env.theme, landscape: view.env.landscape } : null; },
+  };
 }

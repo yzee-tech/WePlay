@@ -15,13 +15,13 @@ export const THEMES = {
     sky: [0x0b1a2e, 0x35648f, 0x9ec3dd], // top, mid, horizon (current look)
     tones: {
       far: 0x1c3a52, near: 0x25503f, ground: 0x2f5a38, groundTop: 0x3f7a47,
-      water: 0x3f6f9e, sand: 0xd8c28a, snow: 0xf2f6f8, window: 0x2b3642,
+      water: 0x3f6f9e, sand: 0xd8c28a, snow: 0xf2f6f8, window: 0x2b3642, structure: 0x1a3040,
     },
     cloud: { color: 0xffffff, opacity: 0.5 },
     ambient: { color: 0xffffff, intensity: 0.9 },
     sun: { color: 0xfff2d8, intensity: 2.2, position: [-10, 20, 20] },
     stars: false,
-    disc: { color: 0xfff3c4, x: -10, y: 12, z: -11, r: 1.6 }, // soft sun
+    disc: { color: 0xfff6d8, x: -10, y: 12.5, z: -11, r: 1.2 }, // soft sun
     windowsLit: false,
     bombColor: null, // null keeps the gameplay default
   },
@@ -29,7 +29,7 @@ export const THEMES = {
     sky: [0x2a1b3d, 0xb3502e, 0xffb257],
     tones: {
       far: 0x4a2b4a, near: 0x3d2f45, ground: 0x3a3f2e, groundTop: 0x555f36,
-      water: 0x8a5468, sand: 0xc99a6a, snow: 0xf6d9c8, window: 0xffca7a,
+      water: 0x8a5468, sand: 0xc99a6a, snow: 0xf6d9c8, window: 0xffca7a, structure: 0x3a2438,
     },
     cloud: { color: 0xffd9c0, opacity: 0.55 },
     ambient: { color: 0xffd9b8, intensity: 0.75 },
@@ -44,7 +44,7 @@ export const THEMES = {
     sky: [0x0a1830, 0x16305a, 0x2f5a8a],
     tones: {
       far: 0x14283f, near: 0x1b3a50, ground: 0x1a3232, groundTop: 0x234545,
-      water: 0x22456e, sand: 0x7a6c50, snow: 0xcfd8e8, window: 0xffca7a,
+      water: 0x22456e, sand: 0x6a6355, snow: 0xcfd8e8, window: 0xffca7a, structure: 0x101f30,
     },
     cloud: { color: 0x9db4d4, opacity: 0.4 },
     ambient: { color: 0x9db8e8, intensity: 0.65 },
@@ -100,15 +100,15 @@ export const LANDSCAPES = {
     { kind: 'rect', x: 40, w: 7, h: 7.5, z: -10, tone: 'far' },
     { kind: 'rect', x: 50, w: 6, h: 5.5, z: -10, tone: 'far' },
     // Near row, offset, with windows
-    { kind: 'rect', x: -42, w: 8, h: 3.5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: -31, w: 7, h: 5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: -20, w: 8, h: 3, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: -9, w: 7, h: 4.5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: 4, w: 9, h: 5.5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: 16, w: 7, h: 3.5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: 27, w: 8, h: 4.5, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: 39, w: 7, h: 6, z: -6, tone: 'near', windows: true },
-    { kind: 'rect', x: 49, w: 6, h: 3.5, z: -6, tone: 'near', windows: true },
+    { kind: 'rect', x: -42, w: 8, h: 3.5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: -31, w: 7, h: 5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: -20, w: 8, h: 3, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: -9, w: 7, h: 4.5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: 4, w: 9, h: 5.5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: 16, w: 7, h: 3.5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: 27, w: 8, h: 4.5, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: 39, w: 7, h: 6, z: -6, tone: 'structure', windows: true },
+    { kind: 'rect', x: 49, w: 6, h: 3.5, z: -6, tone: 'structure', windows: true },
   ],
   mountains: [
     { kind: 'peak', x: -44, w: 26, h: 9, z: -10, tone: 'far', snow: true },
@@ -123,9 +123,9 @@ export const LANDSCAPES = {
     // Low distant headlands at the edges, open water in the middle.
     { kind: 'hill', x: -52, w: 22, h: 2.5, z: -10, tone: 'far' },
     { kind: 'hill', x: 52, w: 22, h: 2.5, z: -10, tone: 'far' },
-    { kind: 'band', y: 0, h: 1.8, z: -6, tone: 'water', shimmer: true },
-    { kind: 'boat', x: 17, y: 1.8, z: -6.2, tone: 'far' },
-    { kind: 'boat', x: -30, y: 1.8, z: -9, tone: 'far' },
+    { kind: 'band', y: 0, h: 2.6, z: -6, tone: 'water', shimmer: true },
+    { kind: 'boat', x: 11, y: 2.6, z: -6.2, tone: 'far' },
+    { kind: 'boat', x: -12, y: 2.6, z: -9, tone: 'far' },
   ],
   desert: [
     { kind: 'hill', x: -44, w: 34, h: 3, z: -10, tone: 'sand' },

@@ -32,6 +32,11 @@ export const CFG = {
   planeMaxY: 14.5,
   aimJitter: 2, // random error (world units) in where a plane thinks the bomb will land
 
+  // Scenery presentation (visual only; themes and landscape art live in scenery.js).
+  scenery: {
+    clouds: { count: 9, minSpeed: 0.004, maxSpeed: 0.012, minY: 8, maxY: 14.5, bob: 0.25 },
+  },
+
   waves: {
     firstDelay: 1.2,
     betweenDelay: 2.5,
