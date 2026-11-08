@@ -48,6 +48,7 @@ Note: separate `turret.js`, `planes.js`, `missiles.js` from the first plan were 
 - Sound: launch, explosion, bomb hit, low-health alarm (under 30%), game over; per-sound rate limits and at most 6 concurrent explosions.
 
 ## Change log
+- Dynamic scenery: each new game (start and every Play Again) picks a random environment - one of day/sunset/night themes x one of city/mountains/sea/desert landscapes (the original hills remain the non-random default). Themes, landscape data and the seeded picker live in `air-defense/src/scenery.js` (no Three.js, no DOM; tested by `tests/scenery.test.mjs`); rendering stayed in `render.js`. Scenery randomness draws from `Math.random`, never the gameplay rng. Clouds are now puffy multi-sphere clusters with per-cloud parallax speeds and bob; night adds stars and a moon; city windows light up at sunset/night; night lifts the near-black bomb color for readability. `?env=theme:landscape` pins an environment for verification.
 - Portal: the repo root is now the WePlay portal (game-select carousel from a data list in `portal.js`). Air Defense moved to `air-defense/`; its import map now points to the shared root `vendor/` (`../vendor/three.module.min.js`); a Back to Portal link was added to its start screen; `tests/game.test.mjs` import paths and the Pages `_site` assembly were updated for the new layout.
 - Rev 2.1: missiles no longer detonate at the cursor; they fly until contact or off screen (requested after playtest).
 
