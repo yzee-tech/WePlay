@@ -11,8 +11,8 @@ Revision 2 applies the review from Instinct (9 points) to the original plan, and
 ## Changes from review (revision 2)
 | # | Review point | Resolution |
 |---|---|---|
-| 1 | Vendoring was wrong: minified Three.js is split into two files | Pinned **three@0.185.0**; vendored **both** `three.module.min.js` and `three.core.min.js` in `vendor/` (verified both exist in the package and the module file imports `./three.core.min.js`). Import map maps `three` to `./vendor/three.module.min.js`. Versions and license in `vendor/`. |
-| 2 | Workflow published the whole repo | Workflow now runs the Node tests, copies only `index.html`, `style.css`, `src/`, `vendor/` into `_site`, and uploads `_site`. Done in milestone 1. |
+| 1 | Vendoring was wrong: minified Three.js is split into two files | Pinned **three@0.185.0**; vendored **both** `three.module.min.js` and `three.core.min.js` in `vendor/` (verified both exist in the package and the module file imports `./three.core.min.js`). Import map maps `three` to `../vendor/three.module.min.js` (relative to `air-defense/index.html`; `vendor/` is shared at the repo root since the portal change). Versions and license in `vendor/`. |
+| 2 | Workflow published the whole repo | Workflow now runs the Node tests, assembles only the files the site needs into `_site`, and uploads `_site`. Done in milestone 1. (Originally `index.html`, `style.css`, `src/`, `vendor/`; since the portal change it copies `index.html`, `portal.css`, `portal.js` plus `assets/`, `air-defense/`, `vendor/` - see the layout table below.) |
 | 3 | Bomb cadence undefined | Config: fighter max 1 bomb per pass, bomber max 3; at least 0.8 s between drops. Planes drop only when the predicted landing point is within a tolerance of the turret (fighter 1.5, bomber 5 world units), plus a random aim error of up to 1 unit. |
 | 4 | Bomb velocity undefined | Bombs inherit the plane's horizontal velocity and fall under gravity (12 u/s^2). |
 | 5 | Can bombs be shot down? | Yes. A missile contact or blast destroys a bomb mid-air; scores 25 points. |
@@ -23,17 +23,19 @@ Revision 2 applies the review from Instinct (9 points) to the original plan, and
 
 ## File layout (as built)
 ```
-index.html, style.css          page shell, HUD, overlays, import map
-src/config.js                  all tunable numbers
-src/game.js                    pure rules: waves, bombs, missiles, scoring, health (no Three.js, no DOM)
-src/render.js                  Three.js scene, orthographic camera, meshes (pooled), pointer-to-world
-src/effects.js                 particle pool (cap 400): explosions, smoke
-src/audio.js                   synthesised sound, mute, alarm
-src/hud.js                     DOM HUD and screens
-src/main.js                    loop (fixed 60 Hz, 100 ms clamp), input, state: start / playing / paused / over
-tests/game.test.mjs            Node tests of the rules (15)
-vendor/                        three@0.185.0 (two files) + license
-.github/workflows/pages.yml    tests, assemble _site, deploy
+index.html, portal.css, portal.js   WePlay portal: game-select carousel (games data list in portal.js)
+assets/                             portal background and card artwork
+air-defense/index.html, style.css   game page shell, HUD, overlays, import map, Back to Portal link
+air-defense/src/config.js           all tunable numbers
+air-defense/src/game.js             pure rules: waves, bombs, missiles, scoring, health (no Three.js, no DOM)
+air-defense/src/render.js           Three.js scene, orthographic camera, meshes (pooled), pointer-to-world
+air-defense/src/effects.js          particle pool (cap 400): explosions, smoke
+air-defense/src/audio.js            synthesised sound, mute, alarm
+air-defense/src/hud.js              DOM HUD and screens
+air-defense/src/main.js             loop (fixed 60 Hz, 100 ms clamp), input, state: start / playing / paused / over
+tests/game.test.mjs                 Node tests of the rules
+vendor/                             three@0.185.0 (two files) + license, shared at repo root
+.github/workflows/pages.yml         tests, assemble _site (portal + air-defense/ + assets/ + vendor/), deploy
 ```
 Note: separate `turret.js`, `planes.js`, `missiles.js` from the first plan were folded into `game.js` (rules) and `render.js` (meshes) so the rules stay testable without Three.js.
 
@@ -46,6 +48,7 @@ Note: separate `turret.js`, `planes.js`, `missiles.js` from the first plan were 
 - Sound: launch, explosion, bomb hit, low-health alarm (under 30%), game over; per-sound rate limits and at most 6 concurrent explosions.
 
 ## Change log
+- Portal: the repo root is now the WePlay portal (game-select carousel from a data list in `portal.js`). Air Defense moved to `air-defense/`; its import map now points to the shared root `vendor/` (`../vendor/three.module.min.js`); a Back to Portal link was added to its start screen; `tests/game.test.mjs` import paths and the Pages `_site` assembly were updated for the new layout.
 - Rev 2.1: missiles no longer detonate at the cursor; they fly until contact or off screen (requested after playtest).
 
 ## Verification done

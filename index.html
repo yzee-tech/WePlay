@@ -3,55 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Air Defense</title>
-<link rel="stylesheet" href="style.css">
-<script type="importmap">
-{ "imports": { "three": "./vendor/three.module.min.js" } }
-</script>
+<title>WePlay - Games, Fun, For Everyone</title>
+<link rel="stylesheet" href="portal.css">
 </head>
 <body>
-<div id="stage"></div>
+<div class="bg" aria-hidden="true"></div>
 
-<div id="hud" hidden>
-  <div class="bar" aria-label="Turret health">
-    <span class="label">Turret</span>
-    <div class="track"><div id="health-fill"></div></div>
-    <span id="health-text">100</span>
-  </div>
-  <div class="stats">Wave <b id="wave">1</b> &middot; Score <b id="score">0</b> &middot; Best <b id="high">0</b></div>
-</div>
-<div id="banner" aria-live="polite"></div>
-<button id="mute" type="button" aria-pressed="false">Sound on</button>
+<header class="site-header">
+  <h1 class="wordmark"><span class="we">We</span><span class="play">Play</span></h1>
+  <p class="banner">Games &middot; Fun &middot; For Everyone</p>
+</header>
 
-<div id="screen-start" class="screen">
-  <h1>Air Defense</h1>
-  <p>Enemy planes are attacking. Aim with the mouse, click to fire missiles.<br>
-     Shoot the planes and their bombs. Keep your turret alive.</p>
-  <button id="btn-start" type="button">Click to start</button>
-  <p class="small">P or Esc pauses. Sound plays after you click.</p>
-</div>
+<main>
+  <section class="carousel" aria-roledescription="carousel" aria-label="Games">
+    <button class="arrow prev" type="button" aria-label="Previous game">&#8249;</button>
+    <div class="stage" id="stage"><!-- cards rendered by portal.js --></div>
+    <button class="arrow next" type="button" aria-label="Next game">&#8250;</button>
+  </section>
+  <div class="dots" id="dots" aria-label="Choose game"></div>
+</main>
 
-<div id="screen-pause" class="screen" hidden>
-  <h2>Paused</h2>
-  <button id="btn-resume" type="button">Resume</button>
-</div>
+<footer class="site-footer">A world of fun awaits</footer>
 
-<div id="screen-over" class="screen" hidden>
-  <h2>Turret destroyed</h2>
-  <p>Score <b id="final-score">0</b> &middot; Wave <b id="final-wave">0</b><br>Best <b id="final-high">0</b></p>
-  <button id="btn-restart" type="button">Play again</button>
-</div>
-
-<div id="fatal" class="screen" hidden></div>
-
-<script>
-  // Import maps need Chrome 89+, Firefox 108+, Safari 16.4+.
-  if (!(window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
-    var f = document.getElementById('fatal');
-    f.textContent = 'Your browser is too old to run this game. Please update Chrome, Firefox, Edge or Safari.';
-    f.hidden = false;
-  }
-</script>
-<script type="module" src="src/main.js"></script>
+<script src="portal.js"></script>
 </body>
 </html>
