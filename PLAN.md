@@ -12,7 +12,7 @@ Revision 2 applies the review from Instinct (9 points) to the original plan, and
 | # | Review point | Resolution |
 |---|---|---|
 | 1 | Vendoring was wrong: minified Three.js is split into two files | Pinned **three@0.185.0**; vendored **both** `three.module.min.js` and `three.core.min.js` in `vendor/` (verified both exist in the package and the module file imports `./three.core.min.js`). Import map maps `three` to `../vendor/three.module.min.js` (relative to `air-defense/index.html`; `vendor/` is shared at the repo root since the portal change). Versions and license in `vendor/`. |
-| 2 | Workflow published the whole repo | Workflow now runs the Node tests, copies only `index.html`, `style.css`, `src/`, `vendor/` into `_site`, and uploads `_site`. Done in milestone 1. |
+| 2 | Workflow published the whole repo | Workflow now runs the Node tests, assembles only the files the site needs into `_site`, and uploads `_site`. Done in milestone 1. (Originally `index.html`, `style.css`, `src/`, `vendor/`; since the portal change it copies `index.html`, `portal.css`, `portal.js` plus `assets/`, `air-defense/`, `vendor/` - see the layout table below.) |
 | 3 | Bomb cadence undefined | Config: fighter max 1 bomb per pass, bomber max 3; at least 0.8 s between drops. Planes drop only when the predicted landing point is within a tolerance of the turret (fighter 1.5, bomber 5 world units), plus a random aim error of up to 1 unit. |
 | 4 | Bomb velocity undefined | Bombs inherit the plane's horizontal velocity and fall under gravity (12 u/s^2). |
 | 5 | Can bombs be shot down? | Yes. A missile contact or blast destroys a bomb mid-air; scores 25 points. |
