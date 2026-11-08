@@ -26,30 +26,34 @@ test('pickEnvironment defaults to its own random source (no shared state)', () =
   assert.ok(LANDSCAPE_KEYS.includes(env.landscape));
 });
 
-test('every theme and landscape is reachable and roughly uniform', () => {
-  const seen = new Map();
-  const N = 8000;
-  for (let i = 0; i < N; i++) {
-    const e = pickEnvironment(mulberry32(i + 1));
-    const k = `${e.theme}:${e.landscape}`;
-    seen.set(k, (seen.get(k) || 0) + 1);
+test('pickEnvironment maps rng outputs to theme and landscape buckets', () => {
+  // First draw picks the theme (3 equal buckets), second the landscape (4).
+  const fixed = (...vals) => { let i = 0; return () => vals[i++ % vals.length]; };
+  assert.deepEqual(pickEnvironment(fixed(0, 0)), { theme: 'day', landscape: 'city' });
+  assert.deepEqual(pickEnvironment(fixed(0.32, 0.24)), { theme: 'day', landscape: 'city' });
+  assert.deepEqual(pickEnvironment(fixed(0.34, 0.26)), { theme: 'sunset', landscape: 'mountains' });
+  assert.deepEqual(pickEnvironment(fixed(0.66, 0.49)), { theme: 'sunset', landscape: 'mountains' });
+  assert.deepEqual(pickEnvironment(fixed(0.67, 0.51)), { theme: 'night', landscape: 'sea' });
+  assert.deepEqual(pickEnvironment(fixed(0.999, 0.76)), { theme: 'night', landscape: 'desert' });
+  // Every combo is produced by some bucket - reachability by construction.
+  const seen = new Set();
+  for (let t = 0; t < 3; t++) {
+    for (let l = 0; l < 4; l++) {
+      const e = pickEnvironment(fixed((t + 0.5) / 3, (l + 0.5) / 4));
+      seen.add(`${e.theme}:${e.landscape}`);
+    }
   }
-  const combos = THEME_KEYS.length * LANDSCAPE_KEYS.length;
-  assert.equal(seen.size, combos);
-  const expected = N / combos;
-  for (const [k, count] of seen) {
-    assert.ok(count > expected * 0.7 && count < expected * 1.3, `${k} count ${count} far from ${expected}`);
-  }
+  assert.equal(seen.size, THEME_KEYS.length * LANDSCAPE_KEYS.length);
 });
 
-test('scenery selection never touches the gameplay rng sequence', () => {
-  const before = new Game({ rng: mulberry32(7), halfWidth: 16 });
-  const expected = before.rng();
-  // Interleave arbitrary scenery picks; the game's own rng must be untouched.
-  for (let i = 0; i < 50; i++) pickEnvironment(mulberry32(i));
-  pickEnvironment();
-  const after = new Game({ rng: mulberry32(7), halfWidth: 16 });
-  assert.equal(after.rng(), expected);
+test('interleaved scenery picks never perturb a live gameplay rng', () => {
+  const g = new Game({ rng: mulberry32(7), halfWidth: 16 });
+  const reference = mulberry32(7);
+  for (let i = 0; i < 50; i++) {
+    pickEnvironment(mulberry32(i)); // seeded scenery rng
+    pickEnvironment(); // default Math.random scenery rng
+    assert.equal(g.rng(), reference(), `gameplay draw ${i} must match the undisturbed sequence`);
+  }
 });
 
 test('environmentFromString parses and validates "theme:landscape"', () => {

@@ -31,10 +31,13 @@ function start() {
   const view = new Renderer(document.getElementById('stage'));
   const fx = new Effects(view.scene);
 
-  // Scenery: a new random environment for every new game. '?env=night:city'
-  // pins one environment for the whole session (verification/debugging only).
-  // pickEnvironment draws from Math.random, never from the gameplay rng.
+  // Scenery: one random environment per game. The start screen shows the
+  // first game's environment (no re-roll when Start is clicked); Play Again
+  // picks a fresh one. '?env=night:city' pins one environment for the whole
+  // session (verification/debugging only). pickEnvironment draws from
+  // Math.random, never from the gameplay rng.
   const pinnedEnv = environmentFromString(new URLSearchParams(window.location.search).get('env'));
+  let gamesPlayed = 0;
   view.setEnvironment(pinnedEnv || pickEnvironment());
   const audio = new AudioFx();
   const hud = new Hud();
@@ -58,7 +61,8 @@ function start() {
 
   function begin() {
     audio.unlock();
-    view.setEnvironment(pinnedEnv || pickEnvironment());
+    if (gamesPlayed > 0) view.setEnvironment(pinnedEnv || pickEnvironment()); // Play Again re-rolls
+    gamesPlayed++;
     game.reset();
     fx.clear();
     audio.alarm(false);
