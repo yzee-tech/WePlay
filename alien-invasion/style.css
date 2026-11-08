@@ -1,0 +1,62 @@
+:root { --ink: #e6edf5; --accent: #ffb020; --bad: #ef6a5b; --good: #4cc38a; --panel: rgba(8, 16, 26, 0.72); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0b1a2e; color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+#stage, #stage canvas { position: fixed; top: 0; left: 0; display: block; touch-action: none; }
+
+/* The text field the keyboard types into: invisible but focusable. 16px stops iOS zooming on focus. */
+#typer { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; font-size: 16px; pointer-events: none; }
+
+#hud { position: fixed; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px; pointer-events: none; font-variant-numeric: tabular-nums; }
+#hud[hidden] { display: none; }
+.bar, .stats { background: var(--panel); padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 8px; }
+.stats { gap: 14px; flex-wrap: wrap; justify-content: center; }
+.track { width: 120px; height: 12px; background: #1c2b3a; border-radius: 3px; overflow: hidden; }
+#shield-fill { height: 100%; width: 100%; background: #5cd6ff; transition: width 0.15s; }
+#shield-fill.low { background: var(--bad); }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; }
+.combo { color: var(--accent); font-weight: 700; }
+#btn-pause { pointer-events: auto; padding: 6px 12px; font-size: 14px; color: var(--ink); background: var(--panel); }
+
+#banner { position: fixed; top: 22%; left: 0; right: 0; text-align: center; font-size: clamp(26px, 6vw, 52px); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); text-shadow: 0 2px 12px #000; opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+#banner.show { opacity: 1; }
+
+button { font: inherit; font-weight: 600; color: #1a1205; background: var(--accent); border: 0; border-radius: 6px; padding: 10px 22px; cursor: pointer; }
+button.secondary { color: var(--ink); background: var(--panel); border: 2px solid rgba(255, 255, 255, 0.35); }
+button:hover { filter: brightness(1.1); }
+button:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#mute { position: fixed; right: 10px; bottom: 10px; padding: 4px 10px; font-size: 13px; color: var(--ink); background: var(--panel); }
+#btn-keyboard { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 5; }
+#btn-keyboard[hidden] { display: none; }
+
+.screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; background: rgba(6, 12, 20, 0.72); overflow-y: auto; }
+.screen[hidden] { display: none; }
+.screen h1 { margin: 0; font-size: clamp(34px, 8vw, 68px); letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); }
+.screen h2 { margin: 0; font-size: clamp(26px, 5vw, 42px); }
+.screen p { margin: 0; max-width: 46ch; }
+.menu { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.menu[hidden] { display: none; }
+.menu button { min-width: 220px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.small { font-size: 13px; opacity: 0.75; }
+#lesson-list { display: flex; flex-direction: column; gap: 8px; width: min(420px, 90vw); }
+#lesson-list button { display: flex; justify-content: space-between; align-items: center; gap: 12px; text-align: left; padding: 8px 14px; }
+#lesson-list .blurb { font-weight: 400; font-size: 12px; opacity: 0.75; }
+#lesson-list .done { color: var(--good); }
+.results { display: grid; grid-template-columns: repeat(2, auto); gap: 4px 24px; text-align: left; background: var(--panel); padding: 12px 18px; border-radius: 8px; }
+.results b { text-align: right; font-variant-numeric: tabular-nums; }
+.back-portal { display: inline-block; font-weight: 600; color: var(--accent); text-decoration: none; background: var(--panel); border: 2px solid var(--accent); border-radius: 6px; padding: 10px 22px; cursor: pointer; }
+.back-portal:hover { background: var(--accent); color: #1a1205; }
+.back-portal:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#fatal { background: #0b1a2e; z-index: 10; font-size: 18px; }
+
+@media (max-width: 560px) {
+  .hide-narrow { display: none; }
+  .track { width: 70px; }
+  .bar .label { display: none; }
+  .screen { justify-content: flex-start; padding-top: 24px; }
+}
+@media (max-height: 420px) {
+  .screen { justify-content: flex-start; gap: 8px; }
+  .screen h1 { font-size: 28px; }
+}

@@ -3,7 +3,7 @@
 // path when it launches; "soon" entries show as coming-soon placeholders.
 const GAMES = [
   { id: 'air-defense', title: 'Air Defense', tagline: 'Defend your turret from attacking planes.', path: './air-defense/', status: 'play', art: 'assets/air-defense-card.jpg' },
-  { id: 'soon-2', title: 'Coming Soon', tagline: 'Another great game on the way!', status: 'soon' },
+  { id: 'alien-invasion', title: 'Alien Invasion', tagline: 'Type the words to stop the alien ships.', path: './alien-invasion/', status: 'play', art: 'assets/alien-invasion-card.jpg' },
   { id: 'soon-3', title: 'Coming Soon', tagline: 'More fun ahead!', status: 'soon' },
   { id: 'soon-4', title: 'Coming Soon', tagline: 'Another great game on the way!', status: 'soon' },
   { id: 'soon-5', title: 'Coming Soon', tagline: 'More fun ahead!', status: 'soon' },

@@ -2,7 +2,7 @@
 // Scenery (sky, landscape, clouds, lights) comes from scenery.js data via setEnvironment.
 import * as THREE from 'three';
 import { CFG } from './config.js';
-import { resolveEnvironment, DEFAULT_ENV } from './scenery.js';
+import { resolveEnvironment, DEFAULT_ENV } from '../../shared/scenery.js';
 
 const WORLD_H = CFG.camTop - CFG.camBottom;
 
