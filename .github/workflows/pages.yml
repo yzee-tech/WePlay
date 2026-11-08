@@ -20,11 +20,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run game logic tests
         run: node --test tests/game.test.mjs
-      - name: Assemble site (only the game files are published)
+      - name: Assemble site (portal + games + shared vendor)
         run: |
           mkdir _site
-          cp index.html style.css _site/
-          cp -r src vendor _site/
+          cp index.html portal.css portal.js _site/
+          cp -r assets air-defense vendor _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

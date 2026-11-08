@@ -1,8 +1,8 @@
 // Run with: node --test tests/
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Game, mulberry32, clampAngle, segmentPointDistance, waveSize, bomberChance } from '../src/game.js';
-import { CFG } from '../src/config.js';
+import { Game, mulberry32, clampAngle, segmentPointDistance, waveSize, bomberChance } from '../air-defense/src/game.js';
+import { CFG } from '../air-defense/src/config.js';
 
 const newGame = (seed = 1) => {
   const g = new Game({ rng: mulberry32(seed), halfWidth: 16 });

@@ -25,4 +25,6 @@ button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .screen h2 { margin: 0; font-size: clamp(28px, 5vw, 44px); }
 .screen p { margin: 0; max-width: 46ch; }
 .small { font-size: 13px; opacity: 0.7; }
+.back-portal { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+.back-portal:hover, .back-portal:focus-visible { opacity: 1; border-bottom-color: var(--ink); }
 #fatal { background: #0b1a2e; z-index: 10; font-size: 18px; }
