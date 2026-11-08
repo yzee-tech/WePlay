@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run game logic tests
-        run: node --test tests/game.test.mjs
+        run: node --test tests/game.test.mjs tests/scenery.test.mjs
       - name: Assemble site (portal + games + shared vendor)
         run: |
           mkdir _site
