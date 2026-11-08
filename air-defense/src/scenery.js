@@ -12,16 +12,16 @@ export const LANDSCAPE_KEYS = ['city', 'mountains', 'sea', 'desert'];
 // snow, window (lit windows at sunset/night).
 export const THEMES = {
   day: {
-    sky: [0x0b1a2e, 0x35648f, 0x9ec3dd], // top, mid, horizon (current look)
+    sky: [0x2a63b8, 0x659fd6, 0xcfe6f5], // top, mid, horizon - bright daytime blue
     tones: {
       far: 0x1c3a52, near: 0x25503f, ground: 0x2f5a38, groundTop: 0x3f7a47,
       water: 0x3f6f9e, sand: 0xd8c28a, snow: 0xf2f6f8, window: 0x2b3642, structure: 0x1a3040,
     },
     cloud: { color: 0xffffff, opacity: 0.5 },
-    ambient: { color: 0xffffff, intensity: 0.9 },
+    ambient: { color: 0xffffff, intensity: 1.0 },
     sun: { color: 0xfff2d8, intensity: 2.2, position: [-10, 20, 20] },
     stars: false,
-    disc: { color: 0xfff6d8, x: -10, y: 12.5, z: -11, r: 1.2 }, // soft sun
+    disc: { color: 0xffd23e, x: -10, y: 12.5, z: -11, r: 1.1, glow: { color: 0xffdf6e, r: 2.0, opacity: 0.25 }, rays: { count: 12, length: 0.95, width: 0.22, color: 0xffd23e } }, // flat-art sun with rays
     windowsLit: false,
     bombColor: null, // null keeps the gameplay default
   },
@@ -35,7 +35,7 @@ export const THEMES = {
     ambient: { color: 0xffd9b8, intensity: 0.75 },
     sun: { color: 0xff9a4d, intensity: 1.8, position: [-14, 6, 20] },
     stars: false,
-    disc: { color: 0xffd27a, x: -11, y: 4.5, z: -11, r: 2.2 }, // low sun
+    disc: { color: 0xffd27a, x: -11, y: 4.5, z: -11, r: 2.2, glow: { color: 0xffbe64, r: 4.2, opacity: 0.3 } }, // low sun
     windowsLit: true,
     bombColor: null,
   },
@@ -51,7 +51,7 @@ export const THEMES = {
     sun: { color: 0xbdd3ff, intensity: 1.2, position: [8, 18, 20] }, // moonlight
     stars: true,
     starCount: 180,
-    disc: { color: 0xf4f1de, x: 9, y: 11.5, z: -11, r: 1.3 }, // moon
+    disc: { color: 0xf4f1de, x: 9, y: 11.5, z: -11, r: 1.3, glow: { color: 0xdfe8ff, r: 2.2, opacity: 0.18 } }, // moon
     windowsLit: true,
     bombColor: 0x3d4450, // bombs are near-black by default; lift them at night
   },

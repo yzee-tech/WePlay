@@ -218,11 +218,49 @@ export class Renderer {
   }
 
   buildDisc(disc) {
+    if (disc.glow) {
+      // Two additive rings brighten the sky around the disc like a halo;
+      // additive blending avoids the flat grey disc a plain alpha circle gives.
+      const rings = [
+        [disc.r * 1.6, disc.glow.opacity],
+        [disc.glow.r, disc.glow.opacity * 0.4],
+      ];
+      rings.forEach(([r, opacity], i) => {
+        const glow = new THREE.Mesh(
+          new THREE.CircleGeometry(r, 32),
+          new THREE.MeshBasicMaterial({
+            color: disc.glow.color,
+            transparent: true,
+            opacity,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          })
+        );
+        glow.position.set(disc.x, disc.y, disc.z + i * 0.005);
+        this.sceneryGroup.add(glow);
+      });
+    }
+    if (disc.rays) {
+      const { count, length, width, color } = disc.rays;
+      const rayMat = new THREE.MeshBasicMaterial({ color });
+      for (let i = 0; i < count; i++) {
+        const a = (i / count) * Math.PI * 2;
+        const s = new THREE.Shape();
+        s.moveTo(-width / 2, disc.r + 0.12);
+        s.lineTo(0, disc.r + 0.12 + length);
+        s.lineTo(width / 2, disc.r + 0.12);
+        s.lineTo(-width / 2, disc.r + 0.12);
+        const ray = new THREE.Mesh(new THREE.ShapeGeometry(s), rayMat);
+        ray.position.set(disc.x, disc.y, disc.z + 0.005);
+        ray.rotation.z = -a;
+        this.sceneryGroup.add(ray);
+      }
+    }
     const m = new THREE.Mesh(
       new THREE.CircleGeometry(disc.r, 32),
       new THREE.MeshBasicMaterial({ color: disc.color })
     );
-    m.position.set(disc.x, disc.y, disc.z);
+    m.position.set(disc.x, disc.y, disc.z + 0.01);
     this.sceneryGroup.add(m);
   }
 
