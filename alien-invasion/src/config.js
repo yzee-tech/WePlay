@@ -22,6 +22,11 @@ export const CFG = {
   // Typing metrics (world units per character) are set by the renderer for the current font.
   defaultCharWidth: 0.55,
 
+  // Word labels under the ships: font size in px = clamp(scale * ratio, minPx, maxPx),
+  // where scale is px per world unit for the current viewport. Kept large enough to read
+  // on a phone while the longest word still fits a narrow portrait screen.
+  labelFont: { minPx: 20, maxPx: 34, ratio: 0.75 },
+
   // Combo: every 10 clean characters in a row adds +1 to the score multiplier, up to maxMultiplier.
   combo: { step: 10, maxMultiplier: 5 },
 

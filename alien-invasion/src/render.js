@@ -12,6 +12,12 @@ const SHIP_COLORS = {
   boss: { hull: '#e84c6e', trim: '#912b45', light: '#ffd2dc', alien: '#c2304f' },
 };
 
+/** Word label font size in px for a render scale (px per world unit). Exported so tests can check it. */
+export function labelFontPx(scale) {
+  const f = CFG.labelFont;
+  return Math.max(f.minPx, Math.min(f.maxPx, scale * f.ratio));
+}
+
 function mulberry(seed) {
   let a = seed >>> 0;
   return () => {
@@ -57,7 +63,7 @@ export class Renderer {
     this.canvas.width = Math.round(w * this.dpr);
     this.canvas.height = Math.round(h * this.dpr);
     this.scale = h / (CFG.camTop - CFG.camBottom);
-    this.fontPx = Math.max(15, Math.min(30, this.scale * 0.52));
+    this.fontPx = labelFontPx(this.scale);
     this.font = `700 ${this.fontPx}px ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`;
     const m = this.ctx;
     m.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
