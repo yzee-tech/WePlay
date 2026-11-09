@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<title>Alien Invasion</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage"></div>
+
+<div id="hud" hidden>
+  <div class="bar" aria-label="Base shield">
+    <span class="label">Shield</span>
+    <div class="track"><div id="shield-fill"></div></div>
+  </div>
+  <div class="stats">
+    <span>Wave <b id="wave">1</b></span>
+    <span>Score <b id="score">0</b></span>
+    <span class="hide-narrow">WPM <b id="wpm">0</b></span>
+    <span class="hide-narrow">Acc <b id="acc">100</b>%</span>
+    <span id="combo-box" class="combo" hidden>x<b id="mult">1</b></span>
+  </div>
+  <button id="btn-pause" type="button" aria-label="Pause">II</button>
+</div>
+<div id="banner" aria-live="polite"></div>
+<button id="mute" type="button" aria-pressed="false">Sound on</button>
+<button id="btn-keyboard" type="button" hidden>Tap to open keyboard</button>
+
+<!-- Hidden text field: it holds focus so phones raise the soft keyboard and we can read what is typed. -->
+<input id="typer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" inputmode="text" aria-label="Type here to shoot the aliens">
+
+<div id="screen-start" class="screen">
+  <h1>Alien Invasion</h1>
+  <div id="menu-main" class="menu">
+    <p>Alien ships are landing, each carrying a word. Type the word to blow the ship up before it reaches your base.</p>
+    <button id="btn-invasion" type="button">Invasion</button>
+    <button id="btn-training" type="button" class="secondary">Training lessons</button>
+    <p class="small">Esc or the II button pauses. On a phone, tap a mode to open the keyboard.</p>
+    <p id="best-line" class="small"></p>
+  </div>
+  <div id="menu-training" class="menu" hidden>
+    <p>Pick a lesson. Ships only carry words from the keys you are practicing. Clear 3 waves with 90% accuracy to unlock the next lesson.</p>
+    <div id="lesson-list"></div>
+    <button id="btn-lessons-back" type="button" class="secondary">Back</button>
+  </div>
+  <a class="back-portal" href="../">&larr; Back to Portal</a>
+</div>
+
+<div id="screen-pause" class="screen" hidden>
+  <h2>Paused</h2>
+  <button id="btn-resume" type="button">Resume</button>
+  <button id="btn-quit" type="button" class="secondary">Quit to menu</button>
+  <a class="back-portal" href="../">&larr; Back to Portal</a>
+</div>
+
+<div id="screen-over" class="screen" hidden>
+  <h2 id="over-title">Base destroyed</h2>
+  <p id="over-sub"></p>
+  <div id="over-stats" class="results"></div>
+  <p id="over-keys" class="small"></p>
+  <div class="row">
+    <button id="btn-again" type="button">Play again</button>
+    <button id="btn-next" type="button" hidden>Next lesson</button>
+    <button id="btn-menu" type="button" class="secondary">Menu</button>
+  </div>
+  <a class="back-portal" href="../">&larr; Back to Portal</a>
+</div>
+
+<div id="fatal" class="screen" hidden></div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

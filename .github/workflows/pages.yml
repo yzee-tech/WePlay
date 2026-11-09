@@ -19,12 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run game logic tests
-        run: node --test tests/game.test.mjs tests/scenery.test.mjs
+        run: node --test tests/game.test.mjs tests/scenery.test.mjs tests/typing.test.mjs
       - name: Assemble site (portal + games + shared vendor)
         run: |
           mkdir _site
           cp index.html portal.css portal.js _site/
-          cp -r assets air-defense vendor _site/
+          cp -r assets air-defense alien-invasion shared vendor _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

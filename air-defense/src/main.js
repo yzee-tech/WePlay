@@ -3,7 +3,7 @@ import { Effects } from './effects.js';
 import { AudioFx } from './audio.js';
 import { Hud } from './hud.js';
 import { Game } from './game.js';
-import { pickEnvironment, environmentFromString } from './scenery.js';
+import { pickEnvironment, environmentFromString } from '../../shared/scenery.js';
 
 const STEP = 1 / 60;
 const MAX_FRAME = 0.1;

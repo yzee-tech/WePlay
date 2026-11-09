@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {
   THEMES, LANDSCAPES, THEME_KEYS, LANDSCAPE_KEYS, DEFAULT_ENV,
   pickEnvironment, environmentFromString, resolveEnvironment,
-} from '../air-defense/src/scenery.js';
+} from '../shared/scenery.js';
 import { Game, mulberry32 } from '../air-defense/src/game.js';
 
 const TONES = ['far', 'near', 'ground', 'groundTop', 'water', 'sand', 'snow', 'window', 'structure'];
