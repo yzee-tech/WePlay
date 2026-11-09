@@ -14,6 +14,7 @@ import {
 } from '../alien-invasion/src/words.js';
 import { Stats, Progress, computeWpm, computeAccuracy, assistFactor } from '../alien-invasion/src/stats.js';
 import { diffText, InputDecoder } from '../alien-invasion/src/input.js';
+import { labelFontPx } from '../alien-invasion/src/render.js';
 import { THEME_KEYS, LANDSCAPE_KEYS } from '../shared/scenery.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -597,6 +598,27 @@ test('Alien Invasion pages use only relative URLs and every import resolves to a
   }
   const css = readFileSync(resolve(root, 'alien-invasion/style.css'), 'utf8');
   assert.ok(!/url\(\s*['"]?\//.test(css));
+});
+
+// ---------- word label font ----------
+test('word label font is clearly readable on phone and desktop viewports', () => {
+  // scale is px per world unit: ~20 on a phone with the keyboard open,
+  // ~42 on a full-height portrait phone, 40-60 on a desktop.
+  assert.ok(labelFontPx(20) >= 20, `keyboard-open phone: ${labelFontPx(20)}px`);
+  assert.ok(labelFontPx(42) >= 28, `portrait phone: ${labelFontPx(42)}px`);
+  assert.ok(labelFontPx(60) >= 30, `desktop: ${labelFontPx(60)}px`);
+  assert.ok(labelFontPx(400) <= 40, `giant screen must be capped: ${labelFontPx(400)}px`);
+});
+
+test('the longest word still fits across a narrow phone screen', () => {
+  // A bold monospace advance is about 0.6em; 0.65 leaves margin for fallback fonts.
+  // A 360px-wide phone (halfWidth = 180 / scale) is the tightest screen we support.
+  for (const scale of [20, 42]) {
+    const halfWidth = 180 / scale;
+    const charWorld = (0.65 * labelFontPx(scale)) / scale;
+    const half = (CFG.ships.mothership.maxLen * charWorld) / 2 + 0.45;
+    assert.ok(half <= halfWidth - 0.3, `scale ${scale}: word half ${half.toFixed(2)} vs limit ${(halfWidth - 0.3).toFixed(2)}`);
+  }
 });
 
 test('the hidden typing field is set up for soft keyboards', () => {
