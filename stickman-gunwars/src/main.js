@@ -3,6 +3,7 @@ import { Renderer } from './render.js';
 import { Controls } from './input.js';
 import { AudioFx } from './audio.js';
 import { CFG } from './config.js';
+import { formatTime, canPause, nextPausedOnKey, shouldAutoPause } from './hud.js';
 
 const $ = (id) => document.getElementById(id);
 const els = { stage: $('stage'), joy: $('joy'), knob: $('knob'), jump: $('btn-jump'), fire: $('btn-fire') };
@@ -29,7 +30,7 @@ function updateHud() {
   const [a, b] = game.fighters;
   $('hp0').style.width = `${a.health}%`; $('hp1').style.width = `${b.health}%`;
   $('hp0-text').textContent = a.health; $('hp1-text').textContent = b.health;
-  $('timer').textContent = `0:${String(Math.ceil(game.timeLeft)).padStart(2, '0')}`;
+  $('timer').textContent = formatTime(game.timeLeft);
 }
 
 function onOver(e) {
@@ -62,8 +63,10 @@ function frame(t) {
 
 $('btn-start').addEventListener('click', () => { audio.unlock(); startRound(); });
 $('btn-restart').addEventListener('click', () => { audio.unlock(); startRound(); });
-$('btn-pause').addEventListener('click', () => { paused = true; show('screen-pause', true); });
-$('btn-resume').addEventListener('click', () => { paused = false; show('screen-pause', false); });
+const setPaused = (on) => { paused = on; show('screen-pause', on); };
+const pauseState = () => ({ running, state: game.state, paused });
+$('btn-pause').addEventListener('click', () => { if (canPause(pauseState())) setPaused(true); });
+$('btn-resume').addEventListener('click', () => setPaused(false));
 $('mute').addEventListener('click', () => {
   audio.unlock(); audio.setMuted(!audio.muted);
   $('mute').textContent = audio.muted ? 'Sound off' : 'Sound on';
@@ -72,7 +75,19 @@ $('mute').addEventListener('click', () => {
 $('mute').textContent = audio.muted ? 'Sound off' : 'Sound on';
 addEventListener('resize', () => view.resize());
 addEventListener('orientationchange', () => setTimeout(() => view.resize(), 200));
-addEventListener('keydown', (e) => { if (running && (e.key === 'p' || e.key === 'Escape')) { paused = !paused; show('screen-pause', paused); } });
+addEventListener('keydown', (e) => {
+  if (e.key !== 'p' && e.key !== 'Escape') return;
+  const next = nextPausedOnKey(pauseState());
+  if (next !== paused) setPaused(next);
+});
+// Auto-pause when the tab is hidden or the phone is turned to portrait (the "turn sideways" screen).
+const portraitQuery = matchMedia('(orientation: portrait) and (max-width: 800px)');
+const autoPause = () => {
+  if (shouldAutoPause({ ...pauseState(), hidden: document.hidden, portrait: portraitQuery.matches })) setPaused(true);
+};
+document.addEventListener('visibilitychange', autoPause);
+portraitQuery.addEventListener('change', autoPause);
+addEventListener('pagehide', autoPause);
 // Debug hook for tests and screenshots only: ?debug exposes the game object.
 if (location.search.includes('debug')) window.__gunwars = { game, CFG };
 requestAnimationFrame(frame);
