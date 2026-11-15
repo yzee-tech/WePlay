@@ -20,8 +20,8 @@ in `portal.js`. Adding a game means adding one entry there.
   platforms. Plain 2D canvas, plain ES modules, pure rules in `src/game.js`. PR 1 of step 1:
   arena, running, jumping, aiming, pistol shooting, fall off = round lost, against a
   stationary target dummy (the computer opponent is PR 2). Touch controls (joystick, JUMP,
-  FIRE, drag to aim) or keyboard (A/D, W/Space, mouse, `F`). Not on the portal yet (PR 3);
-  open `/stickman-gunwars/` directly. `?debug` exposes the game object for tests.
+  FIRE, drag to aim) or keyboard (A/D, W/Space, mouse, `F`). Third card on the
+  portal carousel. `?debug` exposes the game object for tests.
 
 ## Run locally
 ES modules need HTTP (not `file://`):
