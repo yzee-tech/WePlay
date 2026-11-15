@@ -16,6 +16,12 @@ in `portal.js`. Adding a game means adding one entry there.
   and numbers; 3 waves each, 90% accuracy unlocks the next). `Esc` or the II button
   pauses. Works with a physical keyboard or a phone soft keyboard (hidden text field).
   Add `?env=night:city` (theme:landscape) to pin the scenery, `?debug=1` for a test hook.
+- **Stickman Battle: Gunwars** (`stickman-gunwars/`) side-view stickman shooter on 14 small
+  platforms. Plain 2D canvas, plain ES modules, pure rules in `src/game.js`. PR 1 of step 1:
+  arena, running, jumping, aiming, pistol shooting, fall off = round lost, against a
+  stationary target dummy (the computer opponent is PR 2). Touch controls (joystick, JUMP,
+  FIRE, drag to aim) or keyboard (A/D, W/Space, mouse, `F`). Third card on the
+  portal carousel. `?debug` exposes the game object for tests.
 
 ## Run locally
 ES modules need HTTP (not `file://`):
