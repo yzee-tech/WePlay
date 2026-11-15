@@ -39,3 +39,23 @@ test('Stickman Battle: Gunwars has a playable portal card', () => {
   assert.equal(g.status, 'play');
   assert.equal(g.path, './stickman-gunwars/');
 });
+
+// Short-landscape layout: guard that the compact phone-sideways rules exist and
+// are scoped by a height query, so desktop and normal screens keep their layout.
+const css = readFileSync(new URL('../portal.css', import.meta.url), 'utf8');
+const shortBlock = css.match(/@media \(max-height: 500px\) and \(orientation: landscape\) \{([\s\S]*?)\n\}/);
+
+test('portal has a short-landscape media query for phones held sideways', () => {
+  assert.ok(shortBlock, 'missing @media (max-height: 500px) and (orientation: landscape)');
+  const body = shortBlock[1];
+  assert.match(body, /\.card\s*\{[^}]*height:\s*2\d\dpx/);
+  assert.match(body, /\.stage\s*\{[^}]*height:\s*2\d\dpx/);
+  assert.match(body, /\.site-footer\s*\{[^}]*display:\s*none/);
+});
+
+test('short-landscape rules stay out of the base styles', () => {
+  const base = css.slice(0, css.indexOf('/* Short landscape screens'));
+  assert.match(base, /\.stage \{[^}]*height: 400px/);
+  assert.match(base, /\.card \{[^}]*height: 350px/);
+  assert.doesNotMatch(base, /\.site-footer \{[^}]*display:\s*none/);
+});

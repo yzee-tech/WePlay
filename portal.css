@@ -207,3 +207,34 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
   .arrow { width: 44px; height: 44px; font-size: 24px; }
   .carousel { gap: 6px; padding: 8px 6px; }
 }
+
+/* Short landscape screens (phone held sideways): compact layout so the whole
+   carousel, PLAY button included, fits without scrolling. Desktop and normal
+   screens are untouched. */
+@media (max-height: 500px) and (orientation: landscape) {
+  body { min-height: 100vh; min-height: 100dvh; }
+  .site-header { padding: 6px 12px 0; }
+  .wordmark { font-size: 38px; -webkit-text-stroke: 2px #1b1440; text-shadow: 0 3px 0 #1b1440, 0 5px 12px rgba(0, 0, 0, 0.55); }
+  .banner { margin-top: 4px; padding: 2px 16px; font-size: 10px; letter-spacing: 0.22em; border-width: 1px; }
+  .carousel { padding: 4px 12px; }
+  .stage { height: 240px; }
+  .card { width: 210px; height: 220px; margin: -110px 0 0 -105px; gap: 4px; padding: 8px 10px 10px; }
+  .card.pos-left { transform: translateX(-235px) scale(0.86); }
+  .card.pos-right { transform: translateX(235px) scale(0.86); }
+  .art { height: 88px; }
+  .art .q { font-size: 44px; }
+  .card h2 { margin: 2px 0 0; font-size: 17px; }
+  .card .tagline { font-size: 12px; line-height: 1.3; max-width: 26ch; }
+  .play-btn { padding: 7px 34px; font-size: 16px; }
+  .arrow { width: 40px; height: 40px; font-size: 22px; }
+  .dots { padding: 10px 0 4px; gap: 10px; }
+  .dot { width: 11px; height: 11px; }
+  .site-footer { display: none; }
+}
+@media (max-height: 360px) and (orientation: landscape) {
+  .banner { display: none; }
+  .wordmark { font-size: 32px; }
+  .stage { height: 230px; }
+  .card { height: 212px; margin-top: -106px; }
+  .art { height: 78px; }
+}
