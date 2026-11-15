@@ -26,6 +26,8 @@ button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
 /* touch controls, drawn over the arena */
 #touch[hidden] { display: none; }
+/* -webkit-touch-callout is not inherited, so repeat it on the controls: a long press must not open the phone's menu */
+#touch, #touch * { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
 #joy { position: fixed; left: max(18px, env(safe-area-inset-left)); bottom: 18px; width: clamp(110px, 26vh, 170px); aspect-ratio: 1; border-radius: 50%; border: 3px solid rgba(255,255,255,.7); background: rgba(10,10,20,.45); touch-action: none; display: flex; align-items: center; justify-content: center; }
 #knob { width: 42%; height: 42%; border-radius: 50%; background: rgba(255,255,255,.65); pointer-events: none; }
 #joy .cap { position: absolute; bottom: -20px; font-size: 11px; letter-spacing: .1em; opacity: .8; pointer-events: none; }
