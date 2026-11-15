@@ -47,7 +47,10 @@ export class Controls {
     stage.addEventListener('pointermove', (e) => {
       if (e.pointerType === 'mouse' || e.pointerId === this.aimId) this.aimPoint = { x: e.clientX, y: e.clientY };
     });
-    const end = (e) => { if (e.pointerType === 'mouse') this.fireHeld = false; if (e.pointerId === this.aimId) this.aimId = null; };
+    const end = (e) => {
+      if (e.pointerType === 'mouse') this.fireHeld = false;
+      if (e.pointerId === this.aimId) { this.aimId = null; this.aimPoint = null; } // forget the touch point, or a stale aim sticks
+    };
     stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
     stage.addEventListener('contextmenu', (e) => e.preventDefault());
 
