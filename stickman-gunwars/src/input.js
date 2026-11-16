@@ -52,7 +52,9 @@ export class Controls {
       if (e.pointerId === this.aimId) { this.aimId = null; this.aimPoint = null; } // forget the touch point, or a stale aim sticks
     };
     stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
-    stage.addEventListener('contextmenu', (e) => e.preventDefault());
+    // Suppress the long-press context menu on every touch surface, not just the stage:
+    // a long press on FIRE/JUMP/the joystick would otherwise pop the phone's system menu.
+    for (const el of [stage, joy, jump, fire]) el.addEventListener('contextmenu', (e) => e.preventDefault());
 
     addEventListener('keydown', (e) => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', ' '].includes(e.key)) e.preventDefault(); this.keys.add(e.key.toLowerCase()); });
     addEventListener('keyup', (e) => this.keys.delete(e.key.toLowerCase()));
