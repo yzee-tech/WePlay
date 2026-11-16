@@ -3,6 +3,8 @@ import { Renderer } from './render.js';
 import { Controls } from './input.js';
 import { AudioFx } from './audio.js';
 import { CFG } from './config.js';
+import { randomLayout } from './layout.js';
+import { pickEnvironment, environmentFromString } from '../../shared/scenery.js';
 import { formatTime, canPause, nextPausedOnKey, shouldAutoPause } from './hud.js';
 
 const $ = (id) => document.getElementById(id);
@@ -18,8 +20,12 @@ const show = (id, on) => { $(id).hidden = !on; };
 const bannerEl = $('banner');
 function showBanner(text, ms = 1200) { bannerEl.textContent = text; bannerEl.classList.add('show'); clearTimeout(bannerTimer); bannerTimer = setTimeout(() => bannerEl.classList.remove('show'), ms); }
 
+// ?env=night:city pins the backdrop (screenshots/tests); otherwise every round rolls a new one.
+const envOverride = environmentFromString(new URLSearchParams(location.search).get('env'));
+
 function startRound() {
-  game.reset();
+  game.reset(randomLayout()); // new random layout and spawns every round
+  view.setEnvironment(envOverride || pickEnvironment()); // new backdrop every round
   show('screen-start', false); show('screen-over', false); show('screen-pause', false);
   show('hud', true); show('touch', true);
   paused = false; running = true;
@@ -89,5 +95,5 @@ document.addEventListener('visibilitychange', autoPause);
 portraitQuery.addEventListener('change', autoPause);
 addEventListener('pagehide', autoPause);
 // Debug hook for tests and screenshots only: ?debug exposes the game object.
-if (location.search.includes('debug')) window.__gunwars = { game, CFG };
+if (location.search.includes('debug')) window.__gunwars = { game, CFG, view };
 requestAnimationFrame(frame);

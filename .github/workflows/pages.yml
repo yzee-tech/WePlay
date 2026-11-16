@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run game logic tests
-        run: node --test tests/game.test.mjs tests/scenery.test.mjs tests/typing.test.mjs tests/gunwars.test.mjs tests/portal.test.mjs tests/gunwars-hud.test.mjs tests/gunwars-aim.test.mjs tests/gunwars-longpress.test.mjs
+        run: node --test tests/game.test.mjs tests/scenery.test.mjs tests/typing.test.mjs tests/gunwars.test.mjs tests/portal.test.mjs tests/gunwars-hud.test.mjs tests/gunwars-aim.test.mjs tests/gunwars-longpress.test.mjs tests/gunwars-layout.test.mjs tests/gunwars-jump.test.mjs
       - name: Assemble site (portal + games + shared vendor)
         run: |
           mkdir _site

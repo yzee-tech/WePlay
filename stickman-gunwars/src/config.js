@@ -8,6 +8,8 @@ export const CFG = {
     w: 22, h: 54, // small stickmen
     runSpeed: 300, airControl: 0.85, accel: 2600,
     jumpSpeed: 780,
+    coyoteTime: 0.09, // a jump still fires this long after running off an edge
+    jumpBuffer: 0.12, // a press this long before landing jumps on touchdown
     maxHealth: 100,
     fireCooldown: 0.3,
     knock: 90, // small push when hit

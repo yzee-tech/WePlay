@@ -31,20 +31,26 @@ export function platformsReachable(platforms, startIndex, reach = CFG.reach) {
 const NO_INPUT = { move: 0, jump: false, fire: false, aim: null };
 
 export class Game {
-  constructor({ rng = Math.random } = {}) {
+  constructor({ rng = Math.random, layout = null } = {}) {
     this.rng = rng;
+    this.layout = layout; // { platforms, spawns: [platformIndex, platformIndex] }; null = classic fixed layout
     this.inputs = [{ ...NO_INPUT }, { ...NO_INPUT }];
     this.events = [];
     this.reset();
   }
 
-  reset() {
+  reset(layout) {
+    if (layout) this.layout = layout;
+    const platforms = this.layout ? this.layout.platforms : CFG.platforms;
+    const spawnIdx = this.layout ? this.layout.spawns : CFG.spawns.map((s) => s.platform);
+    this.platforms = platforms;
     const F = CFG.fighter;
-    this.fighters = CFG.spawns.map((s, i) => {
-      const p = CFG.platforms[s.platform];
+    this.fighters = spawnIdx.map((pi, i) => {
+      const p = platforms[pi];
       return {
         id: i, x: p.x, y: p.y - 1, vx: 0, vy: 0, onGround: false, facing: i === 0 ? 1 : -1,
         aim: i === 0 ? 0 : Math.PI, health: F.maxHealth, alive: true, fireCd: 0, hurt: 0, anim: 0,
+        coyote: 0, jumpBuf: 0, prevJump: false,
       };
     });
     this.bullets = [];
@@ -87,10 +93,18 @@ export class Game {
     } else {
       f.aim = f.facing > 0 ? 0 : Math.PI;
     }
-    if (inp.jump && f.onGround) {
+    // Jump, with a grace window after leaving an edge (coyote time) and a
+    // short buffer for presses made just before landing: falling is a misplay, not bad luck.
+    if (inp.jump && !f.prevJump) f.jumpBuf = F.jumpBuffer;
+    f.prevJump = !!inp.jump;
+    if ((inp.jump || f.jumpBuf > 0) && (f.onGround || f.coyote > 0)) {
       f.vy = -F.jumpSpeed;
       f.onGround = false;
+      f.coyote = 0;
+      f.jumpBuf = 0;
       this.events.push({ type: 'jump', id: f.id });
+    } else {
+      f.jumpBuf = Math.max(0, f.jumpBuf - dt);
     }
     const prevY = f.y;
     f.vy += CFG.gravity * dt;
@@ -99,13 +113,14 @@ export class Game {
     f.x = Math.max(F.w / 2, Math.min(CFG.world.w - F.w / 2, f.x));
     f.onGround = false;
     if (f.vy >= 0) {
-      for (const p of CFG.platforms) {
+      for (const p of this.platforms) {
         if (Math.abs(f.x - p.x) <= p.w / 2 + F.w / 4 && prevY <= p.y + 0.01 && f.y >= p.y) {
           f.y = p.y; f.vy = 0; f.onGround = true;
           break;
         }
       }
     }
+    f.coyote = f.onGround ? F.coyoteTime : Math.max(0, f.coyote - dt);
     if (f.onGround) f.anim += Math.abs(f.vx) * dt * 0.05; else f.anim += dt * 4;
     if (inp.fire && f.fireCd <= 0) this.shoot(f);
     if (f.y > CFG.world.killY && f.alive) {
